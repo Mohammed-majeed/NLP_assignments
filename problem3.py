@@ -26,6 +26,8 @@ f = open("brown_100.txt")
 n = 2
 counts = np.zeros((len(word_index_dict),) * n)
 
+print("word_index_dict",counts.shape)
+
 # Iterate through file and update counts
 for line in f:
     lower_line = line.lower()
