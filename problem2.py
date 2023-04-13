@@ -39,3 +39,5 @@ with open("brown_100.txt", "r") as f:
 probs = counts / np.sum(counts)
 np.savetxt("unigram_probs_100.txt", probs)
 loaded_probs = np.loadtxt("unigram_probs_100.txt")
+
+# TODO: Write to awnser Q&A
