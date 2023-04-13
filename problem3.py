@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-import codecs
-
 
 """
 NLP A2: N-Gram Language Models
@@ -18,19 +16,15 @@ import random
 
 vocab = codecs.open("brown_vocab_100.txt")
 
-
 #load the indices dictionary
 word_index_dict = {}
 for i, line in enumerate(vocab):
     #TODO: import part 1 code to build dictionary
-    pass
 
 f = codecs.open("brown_100.txt")
 
-counts = np.zeros((len(word_index_dict), len(word_index_dict)))
-print(counts)
 
-# counts = #TODO: initialize numpy 0s array
+counts = #TODO: initialize numpy 0s array
 
 
 #TODO: iterate through file and update counts
