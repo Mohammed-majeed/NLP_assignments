@@ -28,11 +28,10 @@ counts = np.zeros((len(word_index_dict),) * n)
 for line in f:
     lower_line = line.lower()
     ngrams = get_ngrams(lower_line.strip(), n)
-    previous_word = "<s>"
     for ngram in ngrams:
         indices = [word_index_dict[w] for w in ngram]
         counts[tuple(indices)] += 1
-        previous_word = ngram[0]
+
 
 f.close()
 
@@ -54,3 +53,7 @@ print("p(calls | anonymous) = ", probs[word_index_dict["anonymous"], word_index_
 # Test GENERATE
 gen = GENERATE(word_index_dict= word_index_dict, probs=probs, model_type='bigram',max_words=10,start_word='<s>')
 print(gen)
+
+"""
+
+"""

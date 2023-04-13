@@ -30,11 +30,11 @@ counts = np.zeros((len(word_index_dict),) * n)
 for line in f:
     lower_line = line.lower()
     ngrams = get_ngrams(lower_line.strip(), n)
-    previous_word = "<s>"
+    # previous_word = "<s>"
     for ngram in ngrams:
         indices = [word_index_dict[w] for w in ngram]
         counts[tuple(indices)] += 1
-        previous_word = ngram[0]
+        # previous_word = ngram[0]
 
 f.close()
 
