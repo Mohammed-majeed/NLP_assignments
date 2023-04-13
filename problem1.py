@@ -15,7 +15,7 @@ with open('brown_vocab_100.txt', 'r') as f:
         word_index_dict[word] = index
 
 
-#read brown_vocab_100.txt into word_index_dict
+#read brown_vocab_100.txt into word_index_dict .
 with open('brown_vocab_100.txt', 'r') as f:
     for index, line in enumerate(f):
         word = line.rstrip('\n')

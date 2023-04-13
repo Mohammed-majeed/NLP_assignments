@@ -22,18 +22,6 @@ def get_ngrams(sentence, n):
         ngrams.append(tuple(words[i:i+n]))
     return ngrams
 
-
-def get_ngrams(sentence, n):
-    """
-    Returns all n-grams in the given sentence.
-    """
-    words = sentence.split()
-    ngrams = []
-    for i in range(len(words) - n + 1):
-        ngrams.append(tuple(words[i:i+n]))
-    return ngrams
-
-
 vocab = open("brown_vocab_100.txt")
 
 #load the indices dictionary
@@ -63,6 +51,7 @@ np.savetxt("unigram_probs_100.txt", probs)
 print("First probability",probs[0])
 print("last probability",probs[-1])
 
+# test with GENERATE
 gen = GENERATE(word_index_dict=word_index_dict, probs=probs, model_type='unigram', max_words=5, start_word='<s>')
 print(gen)
 
@@ -79,29 +68,7 @@ only once to decrease. However, the rate at which this decrease occurs depends o
  specialized technical language or historical texts, the proportion of rare words may actually
    increase as the corpus size grows.
 """
-print(counts)
 
-#normalize and writeout counts.
-probs = counts / np.sum(counts)
-np.savetxt("unigram_probs_100.txt", probs)
-print("First probability",probs[0])
-print("last probability",probs[-1])
-
-
-
-"""
-Intuitively, we might expect that the proportion of words that occur only once would be lower in a
- larger corpus. This is because as the size of the corpus increases, the chances of encountering
-   rare words also increase, and the rarest words become less rare. For example, consider the word 
-   "supercalifragilisticexpialidocious" - this word is extremely rare in everyday language, but if
-     we were to analyze a large corpus of English text, we would likely encounter it multiple times.
-
-Therefore, as we increase the size of the corpus, we would expect the proportion of words that occur 
-only once to decrease. However, the rate at which this decrease occurs depends on the characteristics
- of the corpus, such as the domain, genre, and time period. In some cases, such as with highly 
- specialized technical language or historical texts, the proportion of rare words may actually
-   increase as the corpus size grows.
-"""
 # #!/usr/bin/env python3
 
 # """
