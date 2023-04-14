@@ -33,7 +33,7 @@ f.close()
 
 #normalize and writeout counts.
 probs = counts / np.sum(counts)
-np.savetxt("unigram_probs_100.txt", probs)
+# np.savetxt("unigram_probs_100.txt", probs)
 print("First probability",probs[0])
 print("last probability",probs[-1])
 
