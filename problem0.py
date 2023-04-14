@@ -6,7 +6,6 @@ import matplotlib.pyplot as plt
 
 # Get the list of words
 words = brown.words()
-print(words)
 # Calculate the number of tokens and types
 num_tokens = len(words)
 num_types = len(set(words))
@@ -65,6 +64,7 @@ plt.ylabel("Frequency")
 plt.legend()
 plt.show()
 
+
 # Plot the log-log frequency curves for the whole corpus and two different genres
 plt.loglog(freq_list)
 plt.title("Log-Log Frequency Curve - Brown Corpus")
@@ -76,15 +76,14 @@ for genre in genres:
     genre_words = brown.words(categories=genre)
     genre_fdist = nltk.FreqDist(genre_words)
     genre_sorted_words = sorted(set(genre_words), key=lambda x: -genre_fdist[x])
-genre_freq_list = [genre_fdist[word] for word in genre_sorted_words]
-plt.loglog(genre_freq_list, label=genre)
+    genre_freq_list = [genre_fdist[word] for word in genre_sorted_words]
+    plt.loglog(genre_freq_list, label=genre)
 
 plt.title("Log-Log Frequency Curves - Brown Corpus")
 plt.xlabel("Log Word Rank")
 plt.ylabel("Log Frequency")
 plt.legend()
 plt.show()
-
 
 
 
