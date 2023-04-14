@@ -51,9 +51,9 @@ print("p(campaign | the) = ", probs[word_index_dict["the"], word_index_dict["cam
 print("p(calls | anonymous) = ", probs[word_index_dict["anonymous"], word_index_dict["calls"]])
 
 
-# Test GENERATE
-gen = GENERATE(word_index_dict= word_index_dict, probs=probs, model_type='bigram',max_words=10,start_word='<s>')
-print(gen)
+# # Test GENERATE
+# gen = GENERATE(word_index_dict= word_index_dict, probs=probs, model_type='bigram',max_words=10,start_word='<s>')
+# print(gen)
 
 
 #Difference between bigram_probs and smooth_probs
@@ -61,6 +61,15 @@ bigram_probs = np.loadtxt("bigram_probs.txt")
 smooth_probs = np.loadtxt("smooth_probs.txt")
 
 print("Difference between bigram_probs and smooth_probs:", np.sum(np.abs(bigram_probs - smooth_probs)))
+
+
+# for problem 7
+with open('smoothed_generation.txt', 'w') as f:
+    for i in range(10):
+        generated_text = GENERATE(word_index_dict=word_index_dict, probs=probs, model_type='bigram', max_words=10, start_word='<s>')
+        f.write(generated_text + '\n')
+
+
 
 """
 A difference of 1574.26 between the two files suggests that the smoothing had a significant

@@ -51,7 +51,12 @@ print("p(jury | the) = ", probs[word_index_dict["the"], word_index_dict["jury"]]
 print("p(campaign | the) = ", probs[word_index_dict["the"], word_index_dict["campaign"]])
 print("p(calls | anonymous) = ", probs[word_index_dict["anonymous"], word_index_dict["calls"]])
 
-# test  GENERATE
-gen = GENERATE(word_index_dict= word_index_dict, probs=probs, model_type='bigram',max_words=10,start_word='<s>')
-print(gen)
+
+
+# for problem 7
+with open('bigram_generation.txt', 'w') as f:
+    for i in range(10):
+        generated_text = GENERATE(word_index_dict=word_index_dict, probs=probs, model_type='bigram', max_words=10, start_word='<s>')
+        f.write(generated_text + '\n')
+
 

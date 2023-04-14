@@ -50,9 +50,16 @@ np.savetxt("unigram_probs_100.txt", probs)
 print("First probability",probs[0])
 print("last probability",probs[-1])
 
-# test with GENERATE
-gen = GENERATE(word_index_dict=word_index_dict, probs=probs, model_type='unigram', max_words=5, start_word='<s>')
-print(gen)
+# # test with GENERATE
+# gen = GENERATE(word_index_dict=word_index_dict, probs=probs, model_type='unigram', max_words=5, start_word='<s>')
+# print(gen)
+
+# for problem 7
+with open('unigram_generation.txt', 'w') as f:
+    for i in range(10):
+        generated_text = GENERATE(word_index_dict=word_index_dict, probs=probs, model_type='unigram', max_words=10, start_word='<s>')
+        f.write(generated_text + '\n')
+
 
 """
 Intuitively, we might expect that the proportion of words that occur only once would be lower in a
