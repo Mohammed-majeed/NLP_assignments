@@ -50,9 +50,33 @@ np.savetxt("unigram_probs_100.txt", probs)
 print("First probability",probs[0])
 print("last probability",probs[-1])
 
-# # test with GENERATE
-# gen = GENERATE(word_index_dict=word_index_dict, probs=probs, model_type='unigram', max_words=5, start_word='<s>')
-# print(gen)
+# for problem 6
+#calculate perplexity of sentences in toy_corpus.txt and write to file
+toy_corpus = open("toy_corpus.txt")
+output_file = open("unigram_eval.txt", "w")
+
+for sentence in toy_corpus:
+    # Tokenize the sentence into individual words
+    words = (sentence.lower()).split()
+    # Calculate the joint probability of all the words under the unigram model
+    sentence_prob = 1.0
+    #get length of sentence
+    sent_len = len(sentence.split())
+    for word in words:
+        # Look up the index of the word in the word_index_dict
+        if word in word_index_dict:
+            index = word_index_dict[word]
+            # Retrieve the corresponding probability from the probs array
+            word_prob = probs[index]
+            # Multiply the probability into the joint probability
+            sentence_prob *= word_prob
+    #calculate perplexity of sentence
+    perplexity = 1.0 / pow(sentence_prob, 1.0/sent_len)
+    # Write the resulting probability to the output file
+    output_file.write(str(perplexity) + "\n")
+
+toy_corpus.close()
+output_file.close()
 
 # for problem 7
 with open('unigram_generation.txt', 'w') as f:

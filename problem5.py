@@ -50,6 +50,7 @@ print("p(time | in, the) (unsmoothed) = ", probs[word_index_dict["in"], word_ind
 print("p(said | the, jury) (unsmoothed) = ", probs[word_index_dict["the"], word_index_dict["jury"], word_index_dict["said"]])
 print("p(recommended | the, jury) (unsmoothed) = ", probs[word_index_dict["the"], word_index_dict["jury"], word_index_dict["recommended"]])
 print("p(that | jury, said) (unsmoothed) = ", probs[word_index_dict["jury"], word_index_dict["said"], word_index_dict["that"]])
+print("p(, | agriculture, teacher) (unsmoothed) = ", probs[word_index_dict["agriculture"], word_index_dict["teacher"], word_index_dict[","]])
 
 
 
@@ -67,3 +68,4 @@ print("p(time | in, the) (smoothed) = ", probs[word_index_dict["in"], word_index
 print("p(said | the, jury) (smoothed) = ", probs[word_index_dict["the"], word_index_dict["jury"], word_index_dict["said"]])
 print("p(recommended | the, jury) (smoothed) = ", probs[word_index_dict["the"], word_index_dict["jury"], word_index_dict["recommended"]])
 print("p(that | jury, said) (smoothed) = ", probs[word_index_dict["jury"], word_index_dict["said"], word_index_dict["that"]])
+print("p(, | agriculture, teacher) (smoothed) = ", probs[word_index_dict["agriculture"], word_index_dict["teacher"], word_index_dict[","]])
