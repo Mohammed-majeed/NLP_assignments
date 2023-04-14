@@ -11,7 +11,6 @@
 import numpy as np
 from generate import GENERATE
 
-
 def get_ngrams(sentence, n):
     """
     Returns all n-grams in the given sentence.
