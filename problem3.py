@@ -56,30 +56,27 @@ output_file.close()
 toy_corpus = open("toy_corpus.txt")
 output_file = open("bigram_eval.txt", "w")
 
-for sentence in toy_corpus:
+for sent in toy_corpus:
     # Tokenize the sentence into individual words
+    temp = sent.split()[:-1]
+    sentence = ' '.join(temp)
     words = (sentence.lower()).split()
     # Calculate the joint probability of all the words under the bigram model
     sentence_prob = 1.0
     #get length of sentence
     sent_len = len(sentence.split())
     for i in range(sent_len - 1):
-        # Look up the index of the bigram in the word_index_dict
-        if words[i] in word_index_dict and words[i+1] in word_index_dict:
-            index1 = word_index_dict[words[i]]
-            index2 = word_index_dict[words[i+1]]
-            # Retrieve the corresponding probability from the probs array
-            bigram_prob = probs[index1, index2]
-            # Multiply the probability into the joint probability
-            sentence_prob *= bigram_prob
-    #check that sentence_prob is greater than 0 before calculating perplexity
-    if sentence_prob > 0:
-        #calculate perplexity of sentence
-        perplexity = 1.0 / pow(sentence_prob, 1.0/sent_len)
-    else:
-        #set perplexity to infinity if sentence_prob is 0
-        perplexity = float('inf')
-    # Write the resulting perplexity to the output file
+        index1 = word_index_dict[words[i]]
+        index2 = word_index_dict[words[i+1]]
+        # Retrieve the corresponding probability from the probs array
+        bigram_prob = probs[index1, index2]
+        # Multiply the probability into the joint probability
+        sentence_prob *= bigram_prob
+
+
+    #calculate perplexity of sentence
+    perplexity = 1.0 / (pow(sentence_prob, 1.0/sent_len))
+
     output_file.write(str(perplexity) + "\n")
 
 toy_corpus.close()
