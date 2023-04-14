@@ -42,7 +42,6 @@ for line in f:
         counts[tuple(indices)] += 1
 
 f.close()
-print("word_index_dict",word_index_dict)
 
 print(counts)
 

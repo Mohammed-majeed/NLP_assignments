@@ -26,7 +26,6 @@ f = open("brown_100.txt")
 n = 2
 counts = np.zeros((len(word_index_dict),) * n)
 
-print("word_index_dict",counts.shape)
 
 # Iterate through file and update counts
 for line in f:
@@ -55,3 +54,4 @@ print("p(calls | anonymous) = ", probs[word_index_dict["anonymous"], word_index_
 # test  GENERATE
 gen = GENERATE(word_index_dict= word_index_dict, probs=probs, model_type='bigram',max_words=10,start_word='<s>')
 print(gen)
+
