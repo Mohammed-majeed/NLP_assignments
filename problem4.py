@@ -68,16 +68,13 @@ smooth_probs.txt file includes the application of smoothing (additive smoothing)
 toy_corpus = open("toy_corpus.txt")
 output_file = open("smoothed_eval.txt", "w")
 
-for sent in toy_corpus:
-    # Tokenize the sentence into individual words
-    temp = sent.split()[:-1]
-    sentence = ' '.join(temp)
+for sentence in toy_corpus:
     # Tokenize the sentence into individual words
     words = (sentence.lower()).split()
     # Calculate the joint probability of all the words under the bigram model
     sentence_prob = 1.0
     #get length of sentence
-    sent_len = len(sentence.split())
+    sent_len = len(sentence.split()[0:-1])
     for i in range(sent_len - 1):
         index1 = word_index_dict[words[i]]
         index2 = word_index_dict[words[i+1]]
@@ -88,6 +85,7 @@ for sent in toy_corpus:
 
     #calculate perplexity of sentence
     perplexity = 1.0 / pow(sentence_prob, 1.0/sent_len)
+    print(perplexity)
 
     output_file.write(str(perplexity) + "\n")
 
@@ -101,15 +99,6 @@ with open('smoothed_generation.txt', 'w') as f:
     for i in range(10):
         generated_text = GENERATE(word_index_dict=word_index_dict, probs=probs, model_type='bigram', max_words=10, start_word='<s>')
         f.write(generated_text + '\n')
-
-
-
-"""
-A difference of 1574.26 between the two files suggests that the smoothing had a significant
- effect on the bigram probabilities. This is not surprising, given that Laplace smoothing with 
- alpha=0.1 was applied to the counts. The effect of smoothing is likely to be more pronounced 
- for rare bigrams in the corpus, which have low raw counts and thus benefit more from smoothing.
-"""
 
 
 
