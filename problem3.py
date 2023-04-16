@@ -56,15 +56,15 @@ output_file.close()
 toy_corpus = open("toy_corpus.txt")
 output_file = open("bigram_eval.txt", "w")
 
-for sent in toy_corpus:
+for sentence in toy_corpus:
     # Tokenize the sentence into individual words
-    temp = sent.split()[:-1]
-    sentence = ' '.join(temp)
+    # temp = sent.split()[:-1]
+    # sentence = ' '.join(temp)
     words = (sentence.lower()).split()
     # Calculate the joint probability of all the words under the bigram model
     sentence_prob = 1.0
     #get length of sentence
-    sent_len = len(sentence.split())
+    sent_len = len(sentence.split()[:-1])
     for i in range(sent_len - 1):
         index1 = word_index_dict[words[i]]
         index2 = word_index_dict[words[i+1]]

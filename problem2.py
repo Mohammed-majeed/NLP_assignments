@@ -71,7 +71,7 @@ for sentence in toy_corpus:
             # Multiply the probability into the joint probability
             sentence_prob *= word_prob
     #calculate perplexity of sentence
-    perplexity = 1.0 / pow(sentence_prob, 1.0/sent_len)
+    perplexity = 1.0 / (pow(sentence_prob, 1.0/sent_len))
     # Write the resulting probability to the output file
     output_file.write(str(perplexity) + "\n")
 
