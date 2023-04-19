@@ -31,3 +31,25 @@ for pair, pmi in sorted_pmi[:20]:
 print("\nBottom 20 word pairs with lowest PMI values:")
 for pair, pmi in sorted_pmi[-20:]:
     print(pair[0], pair[1], pmi)
+    
+# Histogram to show the validity of the independence assumption
+import matplotlib.pyplot as plt
+num_bins = 100
+plt.hist(pmi_values.values(), bins=num_bins, color='blue', alpha=0.5)
+plt.title('PMI Distribution')
+plt.xlabel('PMI')
+plt.ylabel('Frequency')
+plt.show()
+
+abs_pmi = dict()
+for k,v in pmi_values.items():
+    abs_pmi[k] = abs(v)
+
+num_bins = 100
+plt.hist(abs_pmi.values(), bins=num_bins, color='blue', alpha=0.5)
+plt.title('PMI abs Distribution')
+plt.xlabel('abs(pmi)')
+plt.ylabel('Frequency')
+plt.show()
+
+print('average absolute value of PMI: ',sum(abs_pmi.values())/len(abs_pmi.values()))
