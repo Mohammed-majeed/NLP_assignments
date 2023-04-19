@@ -75,7 +75,7 @@ for sentence in toy_corpus:
     sentence_prob = 1.0
     #get length of sentence
     sent_len = len(sentence.split()[0:-1])
-    for i in range(sent_len - 1):
+    for i in range(sent_len):
         index1 = word_index_dict[words[i]]
         index2 = word_index_dict[words[i+1]]
         # Retrieve the corresponding probability from the probs array
