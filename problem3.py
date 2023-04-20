@@ -58,14 +58,13 @@ output_file = open("bigram_eval.txt", "w")
 
 for sentence in toy_corpus:
     # Tokenize the sentence into individual words
-    # temp = sent.split()[:-1]
-    # sentence = ' '.join(temp)
     words = (sentence.lower()).split()
     # Calculate the joint probability of all the words under the bigram model
     sentence_prob = 1.0
     #get length of sentence
     sent_len = len(sentence.split()[:-1])
-    for i in range(sent_len - 1):
+    #for i in range(sent_len - 1):
+    for i in range(sent_len):
         index1 = word_index_dict[words[i]]
         index2 = word_index_dict[words[i+1]]
         # Retrieve the corresponding probability from the probs array
@@ -81,6 +80,27 @@ for sentence in toy_corpus:
 
 toy_corpus.close()
 output_file.close()
+
+# Problem 6.1 Q&A
+""" To compare the performance of the diffrent models
+the perplexity of the were calculated. The perplexity of the
+bigram model was 4.5 and 7.5 for the sentences. While the 
+smoothed model had a perplexity of 53.4 and 54.2. This indicates
+that the bigram has a better probibility distribution for the 
+sentences. So the lower perplexity indicates that the bigram model
+has a better probibility distribution to predict the sample sentences.
+"""
+
+# Problem 6.2 Q&A
+""" For the evaluation of these test samples, the smoothing hurts the
+performance of the model. One of the reasons could be the small size of
+the training corpus. The smoothing is not able to capture the probibility
+distribution of the test samples. As the vocabulary is relative small, and the 
+evaluation samples are also small, the smoothing is not able to capture the
+probibility distribution of the test samples. So the alpha smoothing becomes
+less effective. The evaluation samples may contain rare or unseen words. So the
+smoothing can add additional noise into the model and make it less effective.
+"""
 
 
 # for problem 7

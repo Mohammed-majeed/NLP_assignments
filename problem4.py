@@ -51,7 +51,6 @@ output_file.write("p(calls | anonymous) = " + str(probs[word_index_dict["anonymo
 output_file.close()
 
 
-
 """
 Finally, compare smooth_probs.txt to bigram_probs.txt.
 
@@ -74,8 +73,8 @@ for sentence in toy_corpus:
     # Calculate the joint probability of all the words under the bigram model
     sentence_prob = 1.0
     #get length of sentence
-    sent_len = len(sentence.split()[0:-1])
-    for i in range(sent_len - 1):
+    sent_len = len(sentence.split()[:-1])
+    for i in range(sent_len):
         index1 = word_index_dict[words[i]]
         index2 = word_index_dict[words[i+1]]
         # Retrieve the corresponding probability from the probs array
@@ -101,7 +100,7 @@ with open('smoothed_generation.txt', 'w') as f:
         f.write(generated_text + '\n')
 
 
-
+# Problem 4.1 Q&A 
 """
 Smoothing is useful in language modeling because it can help avoid assigning zero probability to 
 unseen n-grams, which can lead to incorrect estimates of probabilities. The addition of a small 
@@ -111,7 +110,7 @@ mass across all possible n-grams, even those that were not observed in the train
 In this particular case, all four probabilities went down in the smoothed model because the alpha
 smoothing decreased the overall probability mass for all n-grams, including the observed ones.
 """
-
+# Problem 4.2 Q&A 
 """
 In the case of probabilities conditioned on 'the,' add-α smoothing causes less of a decrease 
 compared to other words because 'the' is a high-frequency word that appears frequently in the corpus.
@@ -122,5 +121,3 @@ This behavior is desirable because smoothing can prevent overfitting to the trai
 the model's ability to generalize to unseen data, making it more useful for real-world applications.
 
 """
-
-

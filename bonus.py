@@ -31,3 +31,35 @@ for pair, pmi in sorted_pmi[:20]:
 print("\nBottom 20 word pairs with lowest PMI values:")
 for pair, pmi in sorted_pmi[-20:]:
     print(pair[0], pair[1], pmi)
+    
+# Histogram to show the validity of the independence assumption
+import matplotlib.pyplot as plt
+num_bins = 100
+plt.hist(pmi_values.values(), bins=num_bins, color='blue', alpha=0.5)
+plt.title('PMI Distribution')
+plt.xlabel('PMI')
+plt.ylabel('Frequency')
+plt.show()
+
+abs_pmi = dict()
+for k,v in pmi_values.items():
+    abs_pmi[k] = abs(v)
+
+num_bins = 100
+plt.hist(abs_pmi.values(), bins=num_bins, color='blue', alpha=0.5)
+plt.title('PMI abs Distribution')
+plt.xlabel('abs(pmi)')
+plt.ylabel('Frequency')
+plt.show()
+
+mean = sum(abs_pmi.values())/len(abs_pmi.values())
+
+print('average absolute value of PMI: ', mean)
+
+# Bonus Q&A
+"""
+The independece assumption is not valid because the PMI distribution is not uniform.
+As the plot depicts, a skew to the right is observed, which means that there is 
+a strong relation between two words. The average absolute value of PMI is is not
+close to zero, which means that the independence assumption is not valid.
+"""
