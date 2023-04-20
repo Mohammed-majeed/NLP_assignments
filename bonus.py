@@ -52,4 +52,14 @@ plt.xlabel('abs(pmi)')
 plt.ylabel('Frequency')
 plt.show()
 
-print('average absolute value of PMI: ',sum(abs_pmi.values())/len(abs_pmi.values()))
+mean = sum(abs_pmi.values())/len(abs_pmi.values())
+
+print('average absolute value of PMI: ', mean)
+
+# Bonus Q&A
+"""
+The independece assumption is not valid because the PMI distribution is not uniform.
+As the plot depicts, a skew to the right is observed, which means that there is 
+a strong relation between two words. The average absolute value of PMI is is not
+close to zero, which means that the independence assumption is not valid.
+"""
