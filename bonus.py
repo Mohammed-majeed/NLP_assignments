@@ -61,10 +61,14 @@ import numpy as np
 from scipy.stats import ttest_1samp
 
 data = np.array(list(pmi_values.values()))
-t_statistic, p_value = ttest_1samp(data, 0)
+t_statistic, p_value = ttest_1samp(data, 2.6, alternative = "greater")
 
 print("t statistic =", t_statistic)
 print("p value =", p_value)
+
+# Wilcoxon signed-rank test
+import scipy.stats as stats
+stats.wilcoxon(data-2.5, alternative = "greater" )
 
 # Bonus Q&A
 """
