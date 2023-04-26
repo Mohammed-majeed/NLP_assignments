@@ -51,16 +51,7 @@ output_file.write("p(calls | anonymous) = " + str(probs[word_index_dict["anonymo
 output_file.close()
 
 
-"""
-Finally, compare smooth_probs.txt to bigram_probs.txt.
 
-The results from bigram_probs.txt and smooth_probs.txt are different. This is expected since the 
-smooth_probs.txt file includes the application of smoothing (additive smoothing) to the bigram
- probabilities, whereas the bigram_probs.txt file only contains the raw bigram probabilities. 
- Smoothing helps to address the issue of zero probability for unseen bigrams, but it also alters
-   the probabilities of existing bigrams. Therefore, the smoothed probabilities in smooth_probs.txt 
-   are generally lower than the raw probabilities in bigram_probs.txt.
-"""
 
 # for problem 6
 #calculate perplexity of sentences in toy_corpus.txt and write to file
@@ -99,25 +90,3 @@ with open('smoothed_generation.txt', 'w') as f:
         generated_text = GENERATE(word_index_dict=word_index_dict, probs=probs, model_type='bigram', max_words=10, start_word='<s>')
         f.write(generated_text + '\n')
 
-
-# Problem 4.1 Q&A 
-"""
-Smoothing is useful in language modeling because it can help avoid assigning zero probability to 
-unseen n-grams, which can lead to incorrect estimates of probabilities. The addition of a small 
-constant value (alpha) to all counts in the corpus allows for the distribution of probability 
-mass across all possible n-grams, even those that were not observed in the training corpus.
-
-In this particular case, all four probabilities went down in the smoothed model because the alpha
-smoothing decreased the overall probability mass for all n-grams, including the observed ones.
-"""
-# Problem 4.2 Q&A 
-"""
-In the case of probabilities conditioned on 'the,' add-α smoothing causes less of a decrease 
-compared to other words because 'the' is a high-frequency word that appears frequently in the corpus.
-When we add α to the count of 'the,' its frequency is still much higher than most other words, 
-even after smoothing. Therefore, the impact of smoothing on the probability of 'the' is relatively 
-small compared to other words with lower frequency counts.
-This behavior is desirable because smoothing can prevent overfitting to the training data and improve 
-the model's ability to generalize to unseen data, making it more useful for real-world applications.
-
-"""

@@ -84,20 +84,3 @@ plt.xlabel("Log Word Rank")
 plt.ylabel("Log Frequency")
 plt.legend()
 plt.show()
-
-
-
-"""
-The Brown Corpus was established in 1961 at Brown University, and it was the first electronic corpus of English to contain a million words.
- The corpus comprises text from 500 different sources, which are classified into various genres, including news and editorial. 
- The corpus has played a significant role in advancing linguistic research, as it has enabled scholars to study language use and
-   variation across different genres and contexts.
-
-One of the key linguistic observations from the Brown Corpus is the variation in word frequencies across different genres.
- For instance, function words such as articles and prepositions were found to be more frequent in comparison to content words such as nouns and verbs.
-   This observation suggests that language use is highly influenced by genre and context. Additionally, the corpus revealed that 
-   certain words were more commonly used in some genres than in others. For example, the use of pronouns was found to be more frequent
-     in fiction than in news. These findings have important implications for language modeling, natural language processing, 
-     and our understanding of language structure and function.
-
-"""

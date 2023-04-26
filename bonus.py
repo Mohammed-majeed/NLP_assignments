@@ -69,11 +69,3 @@ print("p value =", p_value)
 # Wilcoxon signed-rank test
 import scipy.stats as stats
 stats.wilcoxon(data-2.5, alternative = "greater" )
-
-# Bonus Q&A
-"""
-The independece assumption is not valid because the PMI distribution is not uniform.
-As the plot depicts, a skew to the right is observed, which means that there is 
-a strong relation between two words. The average absolute value of PMI is is not
-close to zero, which means that the independence assumption is not valid.
-"""

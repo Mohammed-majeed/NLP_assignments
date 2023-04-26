@@ -81,26 +81,6 @@ for sentence in toy_corpus:
 toy_corpus.close()
 output_file.close()
 
-# Problem 6.1 Q&A
-""" To compare the performance of the diffrent models
-the perplexity of the were calculated. The perplexity of the
-bigram model was 4.5 and 7.5 for the sentences. While the 
-smoothed model had a perplexity of 53.4 and 54.2. This indicates
-that the bigram has a better probibility distribution for the 
-sentences. So the lower perplexity indicates that the bigram model
-has a better probibility distribution to predict the sample sentences.
-"""
-
-# Problem 6.2 Q&A
-""" For the evaluation of these test samples, the smoothing hurts the
-performance of the model. One of the reasons could be the small size of
-the training corpus. The smoothing is not able to capture the probibility
-distribution of the test samples. As the vocabulary is relative small, and the 
-evaluation samples are also small, the smoothing is not able to capture the
-probibility distribution of the test samples. So the alpha smoothing becomes
-less effective. The evaluation samples may contain rare or unseen words. So the
-smoothing can add additional noise into the model and make it less effective.
-"""
 
 
 # for problem 7
