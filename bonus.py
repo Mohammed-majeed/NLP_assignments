@@ -56,6 +56,16 @@ mean = sum(abs_pmi.values())/len(abs_pmi.values())
 
 print('average absolute value of PMI: ', mean)
 
+# t-test
+import numpy as np
+from scipy.stats import ttest_1samp
+
+data = np.array(list(pmi_values.values()))
+t_statistic, p_value = ttest_1samp(data, 0)
+
+print("t statistic =", t_statistic)
+print("p value =", p_value)
+
 # Bonus Q&A
 """
 The independece assumption is not valid because the PMI distribution is not uniform.
