@@ -42,16 +42,17 @@ class ParserModel(nn.Module):
         super(ParserModel, self).__init__()
         self.n_features = n_features
         self.n_classes = n_classes
-        self.dropout_prob = dropout_prob
-        self.embed_size = embeddings.shape[1]
+        self.dropout_prob = dropout_prob        
+        self.embed_size = embeddings.shape[1]        
         self.hidden_size = hidden_size
-        self.embeddings = nn.Parameter(torch.tensor(embeddings))
+
+        self.embeddings = nn.Parameter(torch.tensor(embeddings))   
+
 
         ### YOUR CODE HERE (~9-10 Lines)
-        ### TODO:
         ###     1) Declare `self.embed_to_hidden_weight` and `self.embed_to_hidden_bias` as `nn.Parameter`.
         ###        Initialize weight with the `nn.init.xavier_uniform_` function and bias with `nn.init.uniform_`
-        ###        with default parameters.
+        ###        with default parameters.  
         ###     2) Construct `self.dropout` layer.
         ###     3) Declare `self.hidden_to_logits_weight` and `self.hidden_to_logits_bias` as `nn.Parameter`.
         ###        Initialize weight with the `nn.init.xavier_uniform_` function and bias with `nn.init.uniform_`
@@ -72,8 +73,24 @@ class ParserModel(nn.Module):
         ### 
         ### See the PDF for hints.
 
+        # Declare self.embed_to_hidden_weight and self.embed_to_hidden_bias as nn.Parameter
+        self.embed_to_hidden_weight = nn.Parameter(torch.empty(self.embed_size * self.n_features, hidden_size))
+        self.embed_to_hidden_bias = nn.Parameter(torch.empty(hidden_size))
 
+        # Initialize self.embed_to_hidden_weight with nn.init.xavier_uniform_ and self.embed_to_hidden_bias with nn.init.uniform_
+        nn.init.xavier_uniform_(self.embed_to_hidden_weight)
+        nn.init.uniform_(self.embed_to_hidden_bias)
 
+        # Construct self.dropout layer
+        self.dropout = nn.Dropout(p=self.dropout_prob)
+
+        # Declare self.hidden_to_logits_weight and self.hidden_to_logits_bias as nn.Parameter
+        self.hidden_to_logits_weight = nn.Parameter(torch.empty(hidden_size, n_classes))
+        self.hidden_to_logits_bias = nn.Parameter(torch.empty(n_classes))
+
+        # Initialize self.hidden_to_logits_weight with nn.init.xavier_uniform_ and self.hidden_to_logits_bias with nn.init.uniform_
+        nn.init.xavier_uniform_(self.hidden_to_logits_weight)
+        nn.init.uniform_(self.hidden_to_logits_bias)
 
         ### END YOUR CODE
 
@@ -86,10 +103,8 @@ class ParserModel(nn.Module):
         """
 
         ### YOUR CODE HERE (~1-4 Lines)
-        ### TODO:
         ###     1) For each index `i` in `w`, select `i`th vector from self.embeddings
         ###     2) Reshape the tensor using `view` function if necessary
-        ###
         ### Note: All embedding vectors are stacked and stored as a matrix. The model receives
         ###       a list of indices representing a sequence of words, then it calls this lookup
         ###       function to map indices to sequence of embeddings.
@@ -106,7 +121,9 @@ class ParserModel(nn.Module):
         ###     View: https://pytorch.org/docs/stable/tensors.html#torch.Tensor.view
         ###     Flatten: https://pytorch.org/docs/stable/generated/torch.flatten.html
 
-
+        tmp_features = self.pretrained_embeddings(w)
+        shape = tmp_features.size()
+        x = tmp_features.view(shape[0],shape[1]*shape[2])
 
         ### END YOUR CODE
         return x
@@ -131,8 +148,8 @@ class ParserModel(nn.Module):
         @return logits (Tensor): tensor of predictions (output after applying the layers of the network)
                                  without applying softmax (batch_size, n_classes)
         """
+        
         ### YOUR CODE HERE (~3-5 lines)
-        ### TODO:
         ###     Complete the forward computation as described in write-up. In addition, include a dropout layer
         ###     as decleared in `__init__` after ReLU function.
         ###
@@ -143,6 +160,11 @@ class ParserModel(nn.Module):
         ###     Matrix product: https://pytorch.org/docs/stable/torch.html#torch.matmul
         ###     ReLU: https://pytorch.org/docs/stable/nn.html?highlight=relu#torch.nn.functional.relu
 
+        x = self.embedding_lookup(w)
+        x = self.embed_to_hidden(x)
+        x = nn.functional.relu(x)
+        x = self.dropout(x)
+        logits = self.hidden_to_logits(x)
 
         ### END YOUR CODE
         return logits

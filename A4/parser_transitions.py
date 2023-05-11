@@ -32,6 +32,9 @@ class PartialParse(object):
         ### Note: If you need to use the sentence object to initialize anything, make sure to not directly 
         ###       reference the sentence object.  That is, remember to NOT modify the sentence object. 
 
+        self.stack = ["ROOT"]
+        self.buffer = sentence[:]
+        self.dependencies = []
 
         ### END YOUR CODE
 
@@ -44,14 +47,20 @@ class PartialParse(object):
                                 transition is a legal transition.
         """
         ### YOUR CODE HERE (~7-12 Lines)
-        ### TODO:
         ###     Implement a single parsing step, i.e. the logic for the following as
         ###     described in the pdf handout:
         ###         1. Shift
         ###         2. Left Arc
         ###         3. Right Arc
 
-
+        if self.buffer and transition == "S":
+            self.stack.append(self.buffer.pop(0))
+        elif len(self.stack) >= 2 and transition == "LA":
+            self.dependencies.append((self.stack[-1], self.stack[-2]))
+            self.stack.pop(-2)
+        elif len(self.stack) >= 2 and transition == "RA":
+            self.dependencies.append((self.stack[-2], self.stack[-1]))
+            self.stack.pop(-1)
         ### END YOUR CODE
 
     def parse(self, transitions):
@@ -89,7 +98,6 @@ def minibatch_parse(sentences, model, batch_size):
     dependencies = []
 
     ### YOUR CODE HERE (~8-10 Lines)
-    ### TODO:
     ###     Implement the minibatch parse algorithm.  Note that the pseudocode for this algorithm is given in the pdf handout.
     ###
     ###     Note: A shallow copy (as denoted in the PDF) can be made with the "=" sign in python, e.g.
@@ -102,6 +110,23 @@ def minibatch_parse(sentences, model, batch_size):
     ###             to remove objects from the `unfinished_parses` list. This will free the underlying memory that
     ###             is being accessed by `partial_parses` and may cause your code to crash.
 
+    assert batch_size != 0
+
+    partial_parses = [PartialParse(s) for s in sentences]
+    unfinished_parses = partial_parses
+
+    while unfinished_parses:
+        batch_parser = unfinished_parses[:batch_size]
+        while batch_parser:
+            transitions = model.predict(batch_parser)
+            # print(transitions)
+            for parser,transition in zip(batch_parser,transitions):
+                parser.parse_step(transition)
+            batch_parser = [parser for parser in batch_parser if len(parser.stack) > 1 or parser.buffer]
+            # print(len(batch_parser))
+        unfinished_parses = unfinished_parses[batch_size:]
+    
+    dependencies = [parser.dependencies for parser in partial_parses]
 
     ### END YOUR CODE
 
