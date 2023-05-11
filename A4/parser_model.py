@@ -121,8 +121,11 @@ class ParserModel(nn.Module):
         ###     View: https://pytorch.org/docs/stable/tensors.html#torch.Tensor.view
         ###     Flatten: https://pytorch.org/docs/stable/generated/torch.flatten.html
 
+        # Maps each element of w to its corresponding pretrained embedding vector
         tmp_features = self.pretrained_embeddings(w)
+        # retrieves the size of the tmp_features tensor
         shape = tmp_features.size()
+        # to flattens the tensor by concatenating the second and third dimensions.
         x = tmp_features.view(shape[0],shape[1]*shape[2])
 
         ### END YOUR CODE
@@ -160,10 +163,15 @@ class ParserModel(nn.Module):
         ###     Matrix product: https://pytorch.org/docs/stable/torch.html#torch.matmul
         ###     ReLU: https://pytorch.org/docs/stable/nn.html?highlight=relu#torch.nn.functional.relu
 
+        # retrieves the word embeddings for the input tensor w
         x = self.embedding_lookup(w)
+        # applies a linear transformation to x. It maps the input tensor from the embedding layer to the hidden layer
         x = self.embed_to_hidden(x)
+        # applies the ReLU activation function to the tensor x
         x = nn.functional.relu(x)
+        #  applies dropout regularization to the tensor x to prevent overfitting
         x = self.dropout(x)
+        #  applies another linear transformation to x. It maps the tensor from the hidden layer to the output classes.
         logits = self.hidden_to_logits(x)
 
         ### END YOUR CODE

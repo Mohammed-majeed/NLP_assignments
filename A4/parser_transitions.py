@@ -32,8 +32,11 @@ class PartialParse(object):
         ### Note: If you need to use the sentence object to initialize anything, make sure to not directly 
         ###       reference the sentence object.  That is, remember to NOT modify the sentence object. 
 
+        # initializes the stack as a list with a single element, "ROOT"
         self.stack = ["ROOT"]
+        # initializes the buffer as a copy of the sentence list
         self.buffer = sentence[:]
+        # initializes the dependencies as an empty list
         self.dependencies = []
 
         ### END YOUR CODE
@@ -53,13 +56,21 @@ class PartialParse(object):
         ###         2. Left Arc
         ###         3. Right Arc
 
+        # checks if the buffer is not empty and the transition is a shift transition
         if self.buffer and transition == "S":
+            # performs a shift action by appending the first item from the buffer to the stack
             self.stack.append(self.buffer.pop(0))
+        # checks if the stack has at least two elements and the transition is a left-arc transition
         elif len(self.stack) >= 2 and transition == "LA":
+            # performs a left-arc action by creating a dependency between the last two tokens
             self.dependencies.append((self.stack[-1], self.stack[-2]))
+            # removes the second token from the stack
             self.stack.pop(-2)
+        # checks if the stack has at least two elements and the transition is a right-arc transition
         elif len(self.stack) >= 2 and transition == "RA":
+            # performs a right-arc action by creating a dependency between the second last token and the last token
             self.dependencies.append((self.stack[-2], self.stack[-1]))
+            # removes the last token from the stack
             self.stack.pop(-1)
         ### END YOUR CODE
 
@@ -110,22 +121,29 @@ def minibatch_parse(sentences, model, batch_size):
     ###             to remove objects from the `unfinished_parses` list. This will free the underlying memory that
     ###             is being accessed by `partial_parses` and may cause your code to crash.
 
+    # ensures that the batch_size is a non-zero
     assert batch_size != 0
-
+    # creates a list of PartialParse objects for each sentence
     partial_parses = [PartialParse(s) for s in sentences]
+    # creates a shallow copy of the partial_parses list
     unfinished_parses = partial_parses
-
+    
+    # iterate over the minibatches
     while unfinished_parses:
         batch_parser = unfinished_parses[:batch_size]
+        # terates over the batch_parser
         while batch_parser:
+            # get the predicted transitions for the current batch
             transitions = model.predict(batch_parser)
-            # print(transitions)
+            # applies the predicted transitions to each PartialParse object in the batch
             for parser,transition in zip(batch_parser,transitions):
+                # applies the parsing step 
                 parser.parse_step(transition)
+            # filters out the parsers in batch_parser that have either an empty buffer or a stack with only the "ROOT" token
             batch_parser = [parser for parser in batch_parser if len(parser.stack) > 1 or parser.buffer]
-            # print(len(batch_parser))
+        # updates the unfinished_parses to contain the remaining unparsed sentences
         unfinished_parses = unfinished_parses[batch_size:]
-    
+    # a list of dependencies for each parsed sentence
     dependencies = [parser.dependencies for parser in partial_parses]
 
     ### END YOUR CODE
