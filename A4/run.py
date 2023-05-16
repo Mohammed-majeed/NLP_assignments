@@ -114,7 +114,7 @@ def train_for_epoch(parser, train_data, dev_data, optimizer, loss_func, batch_si
             ###     Optimizer Step: https://pytorch.org/docs/stable/optim.html#optimizer-step
 
             # Forward pass Compute the logits by passing the input train_x through the model
-            logits = parser.model.forward(train_x)
+            logits = model(train_x)
             # # Compute the loss by comparing the logits with the ground truth train_y
             loss = loss_func(logits,train_y)
             # Backward pass compute gradients of the loss
