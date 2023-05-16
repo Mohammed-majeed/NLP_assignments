@@ -121,8 +121,8 @@ def train_for_epoch(parser, train_data, dev_data, optimizer, loss_func, batch_si
             loss.backward()
             # Update the model parameters
             optimizer.step()
-            ### END YOUR CODE
-        
+
+            ### END YOUR CODE        
             prog.update(1)
             loss_meter.update(loss.item())
 
