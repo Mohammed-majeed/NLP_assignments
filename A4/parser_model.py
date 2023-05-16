@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-NLP A4 2023
+CS224N 2019-20: Homework 3
 parser_model.py: Feed-Forward Neural Network for Dependency Parsing
-Authors: Sahil Chopra, Haoshen Hong, Nathan Schneider, Lucia Donatelli
+Sahil Chopra <schopra8@stanford.edu>
+Haoshen Hong <haoshen@stanford.edu>
+Author: Jianqiu Wang jw2329[at]cornell[dot]edu
 """
 import argparse
 import numpy as np
@@ -42,17 +44,16 @@ class ParserModel(nn.Module):
         super(ParserModel, self).__init__()
         self.n_features = n_features
         self.n_classes = n_classes
-        self.dropout_prob = dropout_prob        
-        self.embed_size = embeddings.shape[1]        
+        self.dropout_prob = dropout_prob
+        self.embed_size = embeddings.shape[1]
         self.hidden_size = hidden_size
+        self.embeddings = nn.Parameter(torch.tensor(embeddings))
 
-        self.embeddings = nn.Parameter(torch.tensor(embeddings))   
-
-
-        ### YOUR CODE HERE (~9-10 Lines)
+        ### YOUR CODE HERE (~10 Lines)
+        ### TODO:
         ###     1) Declare `self.embed_to_hidden_weight` and `self.embed_to_hidden_bias` as `nn.Parameter`.
         ###        Initialize weight with the `nn.init.xavier_uniform_` function and bias with `nn.init.uniform_`
-        ###        with default parameters.  
+        ###        with default parameters.
         ###     2) Construct `self.dropout` layer.
         ###     3) Declare `self.hidden_to_logits_weight` and `self.hidden_to_logits_bias` as `nn.Parameter`.
         ###        Initialize weight with the `nn.init.xavier_uniform_` function and bias with `nn.init.uniform_`
@@ -70,28 +71,21 @@ class ParserModel(nn.Module):
         ###     nn.Parameter: https://pytorch.org/docs/stable/nn.html#parameters
         ###     Initialization: https://pytorch.org/docs/stable/nn.init.html
         ###     Dropout: https://pytorch.org/docs/stable/nn.html#dropout-layers
-        ### 
-        ### See the PDF for hints.
 
         # Declare self.embed_to_hidden_weight and self.embed_to_hidden_bias as nn.Parameter
-        self.embed_to_hidden_weight = nn.Parameter(torch.empty(self.embed_size * self.n_features, hidden_size))
+        self.embed_to_hidden_weight = nn.Parameter(torch.empty(n_features * self.embed_size, hidden_size))
         self.embed_to_hidden_bias = nn.Parameter(torch.empty(hidden_size))
-
         # Initialize self.embed_to_hidden_weight with nn.init.xavier_uniform_ and self.embed_to_hidden_bias with nn.init.uniform_
         nn.init.xavier_uniform_(self.embed_to_hidden_weight)
         nn.init.uniform_(self.embed_to_hidden_bias)
-
-        # Construct self.dropout layer
-        self.dropout = nn.Dropout(p=self.dropout_prob)
-
+        # Construct drop out
+        self.dropout = nn.Dropout(p=dropout_prob)
         # Declare self.hidden_to_logits_weight and self.hidden_to_logits_bias as nn.Parameter
         self.hidden_to_logits_weight = nn.Parameter(torch.empty(hidden_size, n_classes))
-        self.hidden_to_logits_bias = nn.Parameter(torch.empty(n_classes))
-
+        self.hidden_to_logits_bias = nn.Parameter(torch.empty(n_classes)) 
         # Initialize self.hidden_to_logits_weight with nn.init.xavier_uniform_ and self.hidden_to_logits_bias with nn.init.uniform_
         nn.init.xavier_uniform_(self.hidden_to_logits_weight)
         nn.init.uniform_(self.hidden_to_logits_bias)
-
         ### END YOUR CODE
 
     def embedding_lookup(self, w):
@@ -102,9 +96,11 @@ class ParserModel(nn.Module):
                                 (batch_size, n_features * embed_size)
         """
 
-        ### YOUR CODE HERE (~1-4 Lines)
+        ### YOUR CODE HERE (~1-3 Lines)
+        ### TODO:
         ###     1) For each index `i` in `w`, select `i`th vector from self.embeddings
         ###     2) Reshape the tensor using `view` function if necessary
+        ###
         ### Note: All embedding vectors are stacked and stored as a matrix. The model receives
         ###       a list of indices representing a sequence of words, then it calls this lookup
         ###       function to map indices to sequence of embeddings.
@@ -119,14 +115,10 @@ class ParserModel(nn.Module):
         ###     Index select: https://pytorch.org/docs/stable/torch.html#torch.index_select
         ###     Gather: https://pytorch.org/docs/stable/torch.html#torch.gather
         ###     View: https://pytorch.org/docs/stable/tensors.html#torch.Tensor.view
-        ###     Flatten: https://pytorch.org/docs/stable/generated/torch.flatten.html
+        # self.embeddings: |V|-by-d
 
-        # Maps each element of w to its corresponding pretrained embedding vector
-        tmp_features = self.pretrained_embeddings(w)
-        # retrieves the size of the tmp_features tensor
-        shape = tmp_features.size()
-        # to flattens the tensor by concatenating the second and third dimensions.
-        x = tmp_features.view(shape[0],shape[1]*shape[2])
+        # selects the embedding vectors from self.embeddings corresponding to the indices in w
+        x = self.embeddings.data[w,:].reshape(-1, self.n_features * self.embed_size)
 
         ### END YOUR CODE
         return x
@@ -151,8 +143,8 @@ class ParserModel(nn.Module):
         @return logits (Tensor): tensor of predictions (output after applying the layers of the network)
                                  without applying softmax (batch_size, n_classes)
         """
-        
         ### YOUR CODE HERE (~3-5 lines)
+        ### TODO:
         ###     Complete the forward computation as described in write-up. In addition, include a dropout layer
         ###     as decleared in `__init__` after ReLU function.
         ###
@@ -162,17 +154,15 @@ class ParserModel(nn.Module):
         ### Please see the following docs for support:
         ###     Matrix product: https://pytorch.org/docs/stable/torch.html#torch.matmul
         ###     ReLU: https://pytorch.org/docs/stable/nn.html?highlight=relu#torch.nn.functional.relu
-
+        
         # retrieves the word embeddings for the input tensor w
         x = self.embedding_lookup(w)
-        # applies a linear transformation to x. It maps the input tensor from the embedding layer to the hidden layer
-        x = self.embed_to_hidden(x)
+        # multiply the input embeddings with the weights of the hidden layer and adding bias
+        x = torch.matmul(x, self.embed_to_hidden_weight) + self.embed_to_hidden_bias
         # applies the ReLU activation function to the tensor x
-        x = nn.functional.relu(x)
-        #  applies dropout regularization to the tensor x to prevent overfitting
-        x = self.dropout(x)
-        #  applies another linear transformation to x. It maps the tensor from the hidden layer to the output classes.
-        logits = self.hidden_to_logits(x)
+        h = F.relu(x)
+        # Calculate the logits by multiplying hidden layer output with weights and adding bias
+        logits = torch.matmul(h, self.hidden_to_logits_weight) + self.hidden_to_logits_bias
 
         ### END YOUR CODE
         return logits

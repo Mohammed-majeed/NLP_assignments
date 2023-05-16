@@ -1,9 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-NLP A4 2023
+CS224N 2019-20: Homework 3
 run.py: Run the dependency parser.
-Authors: Sahil Chopra, Haoshen Hong, Nathan Schneider, Lucia Donatelli
+Sahil Chopra <schopra8@stanford.edu>
+Haoshen Hong <haoshen@stanford.edu>
+Author: Jianqiu Wang jw2329[at]cornell[dot]edu
+best train UAS: 88.69 epoch 8/10
+test UAS: 88.77
 """
 from datetime import datetime
 import os
@@ -41,6 +45,7 @@ def train(parser, train_data, dev_data, output_path, batch_size=1024, n_epochs=1
 
 
     ### YOUR CODE HERE (~2-7 lines)
+    ### TODO:
     ###      1) Construct Adam Optimizer in variable `optimizer`
     ###      2) Construct the Cross Entropy Loss Function in variable `loss_func` with `mean`
     ###         reduction (default)
@@ -52,9 +57,10 @@ def train(parser, train_data, dev_data, output_path, batch_size=1024, n_epochs=1
     ###     Cross Entropy Loss: https://pytorch.org/docs/stable/nn.html#crossentropyloss
 
     # Adam Optimizer
-    optimizer = optim.Adam(parser.model.parameters(),lr=lr)
+    optimizer = torch.optim.Adam(model.parameters(), lr=lr)
     # Cross Entropy Loss Function
     loss_func = nn.CrossEntropyLoss()
+
 
     ### END YOUR CODE
 
@@ -95,7 +101,8 @@ def train_for_epoch(parser, train_data, dev_data, optimizer, loss_func, batch_si
             train_x = torch.from_numpy(train_x).long()
             train_y = torch.from_numpy(train_y.nonzero()[1]).long()
 
-            ### YOUR CODE HERE (~4-10 lines)
+            ### YOUR CODE HERE (~5-10 lines)
+            ### TODO:
             ###      1) Run train_x forward through model to produce `logits`
             ###      2) Use the `loss_func` parameter to apply the PyTorch CrossEntropyLoss function.
             ###         This will take `logits` and `train_y` as inputs. It will output the CrossEntropyLoss
@@ -106,7 +113,6 @@ def train_for_epoch(parser, train_data, dev_data, optimizer, loss_func, batch_si
             ### Please see the following docs for support:
             ###     Optimizer Step: https://pytorch.org/docs/stable/optim.html#optimizer-step
 
-
             # Forward pass Compute the logits by passing the input train_x through the model
             logits = parser.model.forward(train_x)
             # # Compute the loss by comparing the logits with the ground truth train_y
@@ -115,9 +121,8 @@ def train_for_epoch(parser, train_data, dev_data, optimizer, loss_func, batch_si
             loss.backward()
             # Update the model parameters
             optimizer.step()
-
-
             ### END YOUR CODE
+        
             prog.update(1)
             loss_meter.update(loss.item())
 

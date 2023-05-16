@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-NLP A4 2023
+CS224N 2019-20: Homework 3
 parser_transitions.py: Algorithms for completing partial parsess.
-Authors: Sahil Chopra, Haoshen Hong, Nathan Schneider, Lucia Donatelli
+Sahil Chopra <schopra8@stanford.edu>
+Haoshen Hong <haoshen@stanford.edu>
+Author: Jianqiu Wang jw2329[at]cornell[dot]edu
 """
 
 import sys
@@ -15,7 +17,7 @@ class PartialParse(object):
         @param sentence (list of str): The sentence to be parsed as a list of words.
                                         Your code should not modify the sentence.
         """
-        # The sentence being parsed is kept for bookkeeping purposes. Do NOT alter it in your code.
+        # The sentence being parsed is kept for bookkeeping purposes. Do not alter it in your code.
         self.sentence = sentence
 
         ### YOUR CODE HERE (3 Lines)
@@ -29,16 +31,13 @@ class PartialParse(object):
         ###             Order for this list doesn't matter.
         ###
         ### Note: The root token should be represented with the string "ROOT"
-        ### Note: If you need to use the sentence object to initialize anything, make sure to not directly 
-        ###       reference the sentence object.  That is, remember to NOT modify the sentence object. 
-
+        ###
         # initializes the stack as a list with a single element, "ROOT"
         self.stack = ["ROOT"]
         # initializes the buffer as a copy of the sentence list
         self.buffer = sentence[:]
         # initializes the dependencies as an empty list
         self.dependencies = []
-
         ### END YOUR CODE
 
 
@@ -49,7 +48,8 @@ class PartialParse(object):
                                 left-arc, and right-arc transitions. You can assume the provided
                                 transition is a legal transition.
         """
-        ### YOUR CODE HERE (~7-12 Lines)
+        ### YOUR CODE HERE (~7-10 Lines)
+        ### TODO:
         ###     Implement a single parsing step, i.e. the logic for the following as
         ###     described in the pdf handout:
         ###         1. Shift
@@ -79,7 +79,7 @@ class PartialParse(object):
 
         @param transitions (list of str): The list of transitions in the order they should be applied
 
-        @return dependencies (list of string tuples): The list of dependencies produced when
+        @return dsependencies (list of string tuples): The list of dependencies produced when
                                                         parsing the sentence. Represented as a list of
                                                         tuples where each tuple is of the form (head, dependent).
         """
@@ -109,7 +109,8 @@ def minibatch_parse(sentences, model, batch_size):
     dependencies = []
 
     ### YOUR CODE HERE (~8-10 Lines)
-    ###     Implement the minibatch parse algorithm.  Note that the pseudocode for this algorithm is given in the pdf handout.
+    ### TODO:
+    ###     Implement the minibatch parse algorithm as described in the pdf handout
     ###
     ###     Note: A shallow copy (as denoted in the PDF) can be made with the "=" sign in python, e.g.
     ###                 unfinished_parses = partial_parses[:].
@@ -120,7 +121,6 @@ def minibatch_parse(sentences, model, batch_size):
     ###             contains references to the same objects. Thus, you should NOT use the `del` operator
     ###             to remove objects from the `unfinished_parses` list. This will free the underlying memory that
     ###             is being accessed by `partial_parses` and may cause your code to crash.
-
     # ensures that the batch_size is a non-zero
     assert batch_size != 0
     # creates a list of PartialParse objects for each sentence
@@ -145,9 +145,7 @@ def minibatch_parse(sentences, model, batch_size):
         unfinished_parses = unfinished_parses[batch_size:]
     # a list of dependencies for each parsed sentence
     dependencies = [parser.dependencies for parser in partial_parses]
-
     ### END YOUR CODE
-
     return dependencies
 
 
